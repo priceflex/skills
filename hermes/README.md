@@ -1,36 +1,39 @@
 # priceflex/skills — fork of [mattpocock/skills](https://github.com/mattpocock/skills)
 
-Fork kept in sync with upstream (`mattpocock/skills` main).
+Remotes: `origin` = this fork, `upstream` = `mattpocock/skills`. `main` tracks upstream untouched.
+Branch `hermes-port` adds this `hermes/` directory: a reproducible Hermes Agent port.
 
-## The `hermes/` directory (branch: `hermes-port`)
+## Files
 
-A Hermes Agent port of the promoted skill set:
+- `port.py` — builds the Hermes skill pack from upstream `skills/engineering` and
+  `skills/productivity`. Its transforms (skip / rename / Hermes notes) are declared at the top.
+- `category-README.md` — installed as `mattpocock/README.md`; documents the transforms.
+- `skills/mattpocock/` — the committed build output (25 skills), identical to what is installed.
 
-- `hermes/skills/mattpocock/` — the 24 promoted skills (engineering + productivity),
-  unchanged from upstream except that they are organized under the `mattpocock/`
-  category and validated against Hermes SKILL.md frontmatter.
-- `hermes/skills/mattpocock/README.md` — port notes: what was skipped (name
-  collisions) and the Hermes-specific adaptations (issue tracker backend,
-  `delegate_task` for parallel subagents, `skill_view` for skill chaining).
-
-Installed live at `~/.hermes/skills/mattpocock/` on the TRS Hermes box (committed in
-a local git repo at `~/.hermes/skills`).
-
-## Re-porting from upstream
+## Commands
 
 ```bash
-./hermes/sync.sh
+./hermes/port.py --check     # fresh build vs installed ~/.hermes/skills/mattpocock (no writes; exit 2 = drift)
+./hermes/port.py --install   # rebuild installed copy + skills/mattpocock here
 ```
 
-Fetches upstream main, diffs it against the installed set, and reports which skills
-are new, changed, or removed since the last port. It does NOT auto-apply: review the
-diff, then copy changed skill dirs into `~/.hermes/skills/mattpocock/`, and commit
-both places (the local skills git repo and this fork's `hermes-port` branch).
-
-## Keeping the fork's main in sync with upstream
+## Pulling upstream changes
 
 ```bash
-git fetch upstream main && git checkout main && git reset --hard upstream/main && git push origin main
+git fetch upstream
+git checkout main && git reset --hard upstream/main && git push origin main
+git checkout hermes-port && git merge main
+./hermes/port.py --check      # review what changes
+./hermes/port.py --install
+git add hermes && git commit -m "hermes: re-port from upstream <sha>" && git push
+cd ~/.hermes/skills && git add mattpocock && git commit -m "mattpocock: re-port from upstream <sha>"
 ```
 
-Remotes: `origin` = this fork (`priceflex/skills`), `upstream` = `mattpocock/skills`.
+## Where it runs
+
+`~/.hermes/skills` is the default profile's skill tree. 168 profiles symlink their `skills/`
+to it, including every Comms Blitz `cb-*` worker (see `hermes_workspace_service.rb`: "skills ->
+symlink to ~/.hermes/skills, live, shared, never cloned"). Those profiles see an install
+immediately. Profiles with their own real `skills/` directory (`worker-template`,
+`cb-99001-2185`) and profiles made by `hermes profile create --clone` hold a snapshot copy and
+do not pick up later changes.

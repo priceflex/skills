@@ -112,3 +112,12 @@ Good interfaces make testing natural:
 
 - **Deepening a cluster given its dependencies**, see [DEEPENING.md](DEEPENING.md): dependency categories, seam discipline, and replace-don't-layer testing.
 - **Exploring alternative interfaces**, see [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md): spin up parallel sub-agents to design the interface several radically different ways, then compare on depth, locality, and seam placement.
+
+<!-- hermes-port:begin -->
+## Hermes runtime notes
+
+- Sub-agents are `delegate_task`. Run parallel ones as ONE call with `tasks: [...]`. Each child
+  starts with a fresh context and sees only its `goal`/`context`: pass file paths (spec, tickets,
+  notes) rather than pasted content. Children cannot spawn children, so you (the parent) own
+  merges and follow-up dispatch. Background children report back between your turns.
+<!-- hermes-port:end -->

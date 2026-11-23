@@ -35,8 +35,18 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, call the Skill tool with `code-review` on the integration branch. Fix all issues raised by the code review in a single fresh **implementer subagent**.
+7. Once all tickets are complete, call the Skill tool with `mattpocock-code-review` on the integration branch. Fix all issues raised by the code review in a single fresh **implementer subagent**.
 
 8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
 9. Clean up all **implementer subagent** worktrees.
+
+<!-- hermes-port:begin -->
+## Hermes runtime notes
+
+- "Call the Skill tool with X" means load it with `skill_view(name='X')` and follow it.
+- Sub-agents are `delegate_task`. Run parallel ones as ONE call with `tasks: [...]`. Each child
+  starts with a fresh context and sees only its `goal`/`context`: pass file paths (spec, tickets,
+  notes) rather than pasted content. Children cannot spawn children, so you (the parent) own
+  merges and follow-up dispatch. Background children report back between your turns.
+<!-- hermes-port:end -->

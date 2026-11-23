@@ -12,6 +12,12 @@ Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
-Once done, call the Skill tool with "code-review" to review the work.
+Once done, call the Skill tool with "mattpocock-code-review" to review the work.
 
 Commit your work to the current branch.
+
+<!-- hermes-port:begin -->
+## Hermes runtime notes
+
+- "Call the Skill tool with X" means load it with `skill_view(name='X')` and follow it.
+<!-- hermes-port:end -->

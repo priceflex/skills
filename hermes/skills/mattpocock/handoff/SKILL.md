@@ -14,3 +14,9 @@ Do not duplicate content already captured in other artifacts (specs, plans, ADRs
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+
+<!-- hermes-port:begin -->
+## Hermes runtime notes
+
+- "Call the Skill tool with X" means load it with `skill_view(name='X')` and follow it.
+<!-- hermes-port:end -->

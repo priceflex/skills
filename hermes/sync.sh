@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-UPSTREAM="origin"  # this repo's origin remote points at mattpocock/skills
+UPSTREAM="upstream"  # remote pointing at mattpocock/skills; origin is the priceflex fork
 INSTALLED="${HERMES_SKILLS_DIR:-$HOME/.hermes/skills/mattpocock}"
 SRC_A="$PWD/skills/engineering"
 SRC_B="$PWD/skills/productivity"
@@ -24,8 +24,13 @@ new=(); changed=(); removed=(); unchanged=0
 
 # names upstream
 upstream_names=$( { ls "$SRC_A" "$SRC_B" 2>/dev/null; } | sort -u | grep -v '^README' || true )
+# skills intentionally skipped during the port (name collisions with existing
+# default-profile skills — see hermes/skills/mattpocock/README.md). Skip them here
+# so they don't show as perpetually "NEW upstream".
+SKIPPED="code-review grilling wayfinder"
 
 for name in $upstream_names; do
+  case " $SKIPPED " in *" $name "*) continue ;; esac
   for src in "$SRC_A" "$SRC_B"; do
     if [ -f "$src/$name/SKILL.md" ]; then
       if [ -f "$INSTALLED/$name/SKILL.md" ]; then

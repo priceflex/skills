@@ -30,7 +30,7 @@ both places (the local skills git repo and this fork's `hermes-port` branch).
 ## Keeping the fork's main in sync with upstream
 
 ```bash
-git fetch origin main && git checkout main && git reset --hard origin/main && git push origin main
+git fetch upstream main && git checkout main && git reset --hard upstream/main && git push origin main
 ```
 
-(`origin` here is `mattpocock/skills`.)
+Remotes: `origin` = this fork (`priceflex/skills`), `upstream` = `mattpocock/skills`.
